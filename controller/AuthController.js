@@ -2,10 +2,11 @@ const bcrypt = require("bcrypt");
 
 const User = require("../models/user.model");
 const TokenGenerate = require("../utils/tokenGenarate");
+const deleteToken = require("../middleware/deleteToken");
 // sign up
 exports.RegisterController = async (req, res) => {
-  const { name, email, password } = req.body;
   try {
+    const { name, email, password } = req.body;
     // Check if username is missing
     if (!name) {
       return res.status(400).json({ error: "Username is required" });
@@ -112,7 +113,7 @@ exports.GetAuthUserController = async (req, res) => {
     const userId = req?.user.id;
 
     const { id } = req?.query;
-
+    console.log(id);
     if (userId === id) {
       const user = await User.findOne({ _id: id });
       return res.status(200).send({
@@ -121,7 +122,24 @@ exports.GetAuthUserController = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
+    console.error(error.message);
+    res.status(500).send("Server Error:" + error.message);
+  }
+};
+// logout
+
+exports.LogOutController = async (req, res) => {
+  try {
+    deleteToken(res);
+
+    res.status(200).json({
+      status: "success",
+      message: "User logout",
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      error: error.message || "Internal server error",
+    });
   }
 };

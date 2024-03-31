@@ -1,27 +1,21 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/user.model");
 
-// Middleware function to verify JWT token from cookie
-const verifiToken = (req, res, next) => {
-  // Get token from cookie
-  const token = req.cookies.token;
-  // console.log(token);
-  // Check if token does not exist
-  if (!token) {
-    return res.status(401).json({ msg: "No token, authorization denied" });
-  }
+const TokenGenerate = (user, res) => {
+  const data = { email: user.email, id: user._id };
+  const oneDay = 24 * 60 * 60 * 1000; // One day in milliseconds
+  const currentTime = Date.now(); // Current time in milliseconds
+  const expirationTime = currentTime + oneDay; // Expiration time is current time plus one day
 
-  // Verify token
-  jwt.verify(token, process.env.SECRET_KEY, async function (err, decoded) {
-    // bar
-    if (err) {
-      return res.status(401).json({ msg: " authorization denied" });
-    }
-    // Add user from payload to request object
-    const user = await User.findOne({ email: decoded.email });
-    req.user = user;
-    next();
+  const token = jwt.sign(data, process.env.JWT_SECRET_KEY, {
+    expiresIn: expirationTime,
+  });
+
+  // Set the cookie with a maximum age of one day and SameSite attribute
+  res.cookie("token", token, {
+    maxAge: expirationTime - currentTime, // maxAge should be in milliseconds relative to the current time
+    httpOnly: true,
+    sameSite: process.env.NODE_ENV === "production" ? "Strict" : "None",
+    secure: process.env.NODE_ENV === "production", // Set secure flag only in production
   });
 };
-
-module.exports = verifiToken;
+module.exports = TokenGenerate;
