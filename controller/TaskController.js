@@ -30,7 +30,6 @@ exports.AddTaskController = async (req, res) => {
 };
 
 // get tasks
-// TODO: NEED TO ADD PAGINATINON
 exports.GetTasksController = async (req, res) => {
   try {
     const { _id: id } = req?.user;
