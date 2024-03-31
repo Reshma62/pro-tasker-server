@@ -42,6 +42,12 @@ exports.GetTasksController = async (req, res) => {
     if (req?.user) {
       query = { userId: id };
     }
+    // filter any field  from the request body like userId or any field
+    for (const key in req.query) {
+      if (req.query.hasOwnProperty(key) && key !== "page" && key !== "size") {
+        query[key] = req.query[key];
+      }
+    }
     const getTasks = await getTaskService(query, skip, size);
 
     res.status(200).json({
