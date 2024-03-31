@@ -1,12 +1,17 @@
 const express = require("express");
 const verifiToken = require("../../middleware/verifiToken");
-const { AddTaskController } = require("../../controller/TaskController");
+const {
+  AddTaskController,
+  GetTasksController,
+  UpdateTasksController,
+  DeleteTasksController,
+} = require("../../controller/TaskController");
 
 const _ = express.Router();
 
 _.post("/addTasks", verifiToken, AddTaskController);
-_.get("/getTasks");
-_.patch("/updateById/:id");
-_.delete("/deleteById/:id");
+_.get("/getTasks", verifiToken, GetTasksController);
+_.patch("/updateById/:id", UpdateTasksController);
+_.delete("/deleteById/:id", DeleteTasksController);
 
 module.exports = _;
