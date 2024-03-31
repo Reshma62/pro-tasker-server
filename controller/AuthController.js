@@ -1,5 +1,5 @@
-const bcrypt = require("bcryptjs");
-var jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+
 const User = require("../models/user.model");
 const TokenGenerate = require("../utils/tokenGenarate");
 // sign up
@@ -35,7 +35,7 @@ exports.RegisterController = async (req, res) => {
     bcrypt.hash(password, 10, async function (err, hash) {
       // Create a new user instance
       user = new User({
-        username,
+        name,
         email,
         password: hash,
       });
@@ -46,8 +46,7 @@ exports.RegisterController = async (req, res) => {
       // Send user data in response
       res.status(200).send({
         data: {
-          userInfo: user.username,
-          userRole: user.accountType,
+          name: user.name,
           userId: user._id,
         },
         message: "User registered successfully",
