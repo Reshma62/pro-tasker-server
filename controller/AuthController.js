@@ -28,7 +28,7 @@ exports.RegisterController = async (req, res) => {
     });
 
     if (user) {
-      return res.status(400).json({
+      return res.json({
         error: "User  already exists",
       });
     }
@@ -51,6 +51,7 @@ exports.RegisterController = async (req, res) => {
           userId: user._id,
         },
         message: "User registered successfully",
+        status: "success",
       });
     });
   } catch (err) {

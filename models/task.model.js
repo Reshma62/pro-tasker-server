@@ -9,6 +9,10 @@ const dataSchema = new Schema(
     description: {
       type: String,
     },
+    status: {
+      type: String,
+      default: "pending", // Options are Pending, In Progress, Completed
+    },
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User", // This is the
