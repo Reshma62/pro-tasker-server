@@ -14,7 +14,7 @@ const TokenGenerate = (user, res) => {
   res.cookie("token", token, {
     maxAge: oneDay, // maxAge should be in milliseconds relative to
     httpOnly: true,
-    secure: false,
+    secure: true,
     sameSite: "none",
   });
 };
