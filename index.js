@@ -6,9 +6,10 @@ const cookieParser = require("cookie-parser");
 const dbConnect = require("./utils/dbConnect");
 const PORT = process.env.PORT || 5000;
 const routes = require("./routes");
+
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: "http://localhost:3000", // Specify the origin of your frontend application
     credentials: true,
   })
 );
@@ -16,11 +17,12 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(routes);
+
 app.get("/", function (req, res) {
-  res.send("Hello World Server health is ok ");
+  res.send("Hello World Server health is ok with cores");
 });
 
 app.listen(PORT, async () => {
   await dbConnect();
-  console.log("server is runnig");
+  console.log("Server is running");
 });

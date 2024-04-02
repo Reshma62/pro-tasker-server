@@ -11,7 +11,8 @@ const {
 const _ = express.Router();
 
 _.post("/addTasks", verifiToken, AddTaskController);
-_.get("/getTasks", verifiToken, GetTasksController);
+_.get("/getTasks", GetTasksController);
+_.get("/test", GetTasksController);
 _.get("/getTasksById/:id", verifiToken, GetTaskByIdController);
 _.patch("/updateById/:id", verifiToken, UpdateTasksController);
 _.delete("/deleteById/:id", verifiToken, DeleteTasksController);
