@@ -5,17 +5,29 @@ exports.addTaskService = async (data) => {
   return result;
 };
 exports.getTaskService = async (query, skip, size) => {
-  const result = await Task.find(query)
+  const resultPromise = Task.find(query)
     .populate("userId", "name email")
     .skip(skip)
-    .limit(size);
-  return result;
+    .limit(size)
+    .sort({ createdAt: -1 });
+
+  const countPromise = Task.countDocuments(query);
+
+  const [result, count] = await Promise.all([resultPromise, countPromise]);
+
+  return { result, count };
 };
+
 exports.updateTaskService = async (id, data) => {
   const result = await Task.findByIdAndUpdate(id, data, { new: true }); //return the updated document
   return result;
 };
 exports.deleteTaskService = async (id) => {
   const result = await Task.findByIdAndDelete(id);
+  return result;
+};
+
+exports.getTaskByIdService = async (id) => {
+  const result = await Task.findOne({ _id: id });
   return result;
 };

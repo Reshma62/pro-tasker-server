@@ -5,13 +5,15 @@ const {
   GetTasksController,
   UpdateTasksController,
   DeleteTasksController,
+  GetTaskByIdController,
 } = require("../../controller/TaskController");
 
 const _ = express.Router();
 
 _.post("/addTasks", verifiToken, AddTaskController);
 _.get("/getTasks", verifiToken, GetTasksController);
-_.patch("/updateById/:id", UpdateTasksController);
-_.delete("/deleteById/:id", DeleteTasksController);
+_.get("/getTasksById/:id", verifiToken, GetTaskByIdController);
+_.patch("/updateById/:id", verifiToken, UpdateTasksController);
+_.delete("/deleteById/:id", verifiToken, DeleteTasksController);
 
 module.exports = _;

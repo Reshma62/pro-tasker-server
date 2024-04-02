@@ -65,12 +65,12 @@ exports.LoginController = async (req, res) => {
     const { email, password } = req.body;
     // Check if email is missing
     if (!email) {
-      return res.status(400).json({ error: "Email Number is required" });
+      return res.json({ error: "Email Number is required" });
     }
 
     // Check if password is missing
     if (!password) {
-      return res.status(400).json({ error: "Password is required" });
+      return res.json({ error: "Password is required" });
     }
     // Check if the user already exists
     let user = await User.findOne({
@@ -78,7 +78,7 @@ exports.LoginController = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.json({ error: "User not found" });
     }
     bcrypt.compare(password, user.password, async function (err, result) {
       if (err) {
@@ -97,6 +97,7 @@ exports.LoginController = async (req, res) => {
             userId: user._id,
           },
           message: "User Login  successfully",
+          status: "success",
         });
       } else {
         // Password does not match
@@ -120,6 +121,7 @@ exports.GetAuthUserController = async (req, res) => {
       return res.status(200).send({
         user,
         message: "Auth users data",
+        status: "success",
       });
     }
   } catch (error) {
@@ -132,7 +134,6 @@ exports.GetAuthUserController = async (req, res) => {
 exports.LogOutController = async (req, res) => {
   try {
     deleteToken(res);
-
     res.status(200).json({
       status: "success",
       message: "User logout",

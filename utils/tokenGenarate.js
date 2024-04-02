@@ -7,15 +7,15 @@ const TokenGenerate = (user, res) => {
   const expirationTime = currentTime + oneDay; // Expiration time is current time plus one day
 
   const token = jwt.sign(data, process.env.JWT_SECRET_KEY, {
-    expiresIn: expirationTime,
+    expiresIn: "1d",
   });
 
   // Set the cookie with a maximum age of one day and SameSite attribute
   res.cookie("token", token, {
-    maxAge: expirationTime - currentTime, // maxAge should be in milliseconds relative to the current time
+    maxAge: oneDay, // maxAge should be in milliseconds relative to
     httpOnly: true,
-    sameSite: process.env.NODE_ENV === "production" ? "Strict" : "None",
-    secure: process.env.NODE_ENV === "production", // Set secure flag only in production
+    secure: true,
+    sameSite: "none",
   });
 };
 module.exports = TokenGenerate;
