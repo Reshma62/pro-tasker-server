@@ -147,9 +147,9 @@ exports.CreateTokenController = async (req, res) => {
    TokenGenerate(user, res)
 
     res.status(200).json({
-      status: 'success',
-      message: 'ServiceName',
-      data: ServiceName
+      status: "success",
+      message: "User login successfully",
+      // data: ServiceName
     });
   } catch (error) {
     res.status(400).json({
