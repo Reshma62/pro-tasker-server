@@ -12,7 +12,7 @@ const TokenGenerate = (user, res) => {
 
   // Set the cookie with a maximum age of one day and SameSite attribute
   res.cookie("token", token, {
-    maxAge: oneDay, // maxAge should be in milliseconds relative to
+    maxAge: 24 * 60 * 60 * 1000, // maxAge should be in milliseconds relative to
     httpOnly: true,
     secure: true,
     sameSite: "none",
