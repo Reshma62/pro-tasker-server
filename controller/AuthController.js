@@ -90,7 +90,7 @@ exports.LoginController = async (req, res) => {
         data: {
           name: user.name,
           email: user.email,
-          userId: user._id,
+          _id: user._id,
         },
         message: "User Login  successfully",
         status: "success",
