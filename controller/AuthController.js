@@ -33,26 +33,26 @@ exports.RegisterController = async (req, res) => {
       });
     }
 
-    bcrypt.hash(password, 10, async function (err, hash) {
-      // Create a new user instance
-      user = new User({
-        name,
-        email,
-        password,
-      });
+    const hash = await bcrypt.hash(password, 10);
 
-      // Save the user to the database
-      await user.save();
+    // Create a new user instance
+    user = new User({
+      name,
+      email,
+      password: hash,
+    });
 
-      // Send user data in response
-      res.status(200).send({
-        data: {
-          name: user.name,
-          userId: user._id,
-        },
-        message: "User registered successfully",
-        status: "success",
-      });
+    // Save the user to the database
+    await user.save();
+
+    // Send user data in response
+    res.status(200).send({
+      data: {
+        name: user.name,
+        userId: user._id,
+      },
+      message: "User registered successfully",
+      status: "success",
     });
   } catch (err) {
     console.error(err.message);
@@ -80,30 +80,25 @@ exports.LoginController = async (req, res) => {
     if (!user) {
       return res.json({ error: "User not found" });
     }
-    bcrypt.compare(password, user.password, async function (err, result) {
-      if (err) {
-        console.log(err.message);
-        return res.status(401).send(err.message);
-      }
+    const comparePassword = await bcrypt.compare(password, user.password);
 
-      if (result) {
-        // genarate token
-        TokenGenerate(user, res);
-        // Send user data in response
-        return res.status(200).send({
-          data: {
-            name: user.name,
-            email: user.email,
-            userId: user._id,
-          },
-          message: "User Login  successfully",
-          status: "success",
-        });
-      } else {
-        // Password does not match
-        return res.status(401).json({ error: "Invalid credentials" });
-      }
-    });
+    if (comparePassword) {
+      // genarate token
+      TokenGenerate(user, res);
+      // Send user data in response
+      return res.status(200).send({
+        data: {
+          name: user.name,
+          email: user.email,
+          userId: user._id,
+        },
+        message: "User Login  successfully",
+        status: "success",
+      });
+    } else {
+      // Password does not match
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
