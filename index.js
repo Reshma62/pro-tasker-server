@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const dbConnect = require("./utils/dbConnect");
 const PORT = process.env.PORT || 5000;
 const routes = require("./routes");
+const { GetTasksController } = require("./controller/TaskController");
 
 app.use(
   cors({
@@ -16,11 +17,12 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(routes);
+// app.use(routes);
 
 app.get("/", function (req, res) {
   res.send("Hello World Server health is ok with cores");
 });
+app.get("/api/v1/task", GetTasksController);
 
 app.listen(PORT, async () => {
   await dbConnect();
