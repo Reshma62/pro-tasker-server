@@ -143,7 +143,8 @@ exports.LogOutController = async (req, res) => {
 // create tokem
 exports.CreateTokenController = async (req, res) => {
   try {
-    const user= req.body
+    const user = req.body;
+    console.log(user);
    TokenGenerate(user, res)
 
     res.status(200).json({

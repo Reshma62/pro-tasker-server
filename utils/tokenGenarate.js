@@ -5,7 +5,7 @@ const TokenGenerate = (user, res) => {
   const token = jwt.sign(data, process.env.JWT_SECRET_KEY, {
     expiresIn: "1d",
   });
-
+console.log(token, "genarate");
   // Set the cookie with a maximum age of one day and SameSite attribute
   res.cookie("token", token, {
     maxAge: 24 * 60 * 60 * 1000, // maxAge should be in milliseconds relative to

@@ -1,6 +1,6 @@
 const Task = require("../models/task.model");
 
-exports.addTaskService = async (data) => {
+exports.addTaskService = async (data, userId) => {
   const result = await new Task(data).save();
   return result;
 };

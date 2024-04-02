@@ -5,7 +5,7 @@ const User = require("../models/user.model");
 const verifiToken = (req, res, next) => {
   // Get token from cookie
   const token = req.cookies.token;
-  // console.log(token);
+  console.log(token);
   // Check if token does not exist
   if (!token) {
     return res.status(401).json({ msg: "No token, authorization denied" });
@@ -19,7 +19,9 @@ const verifiToken = (req, res, next) => {
     }
     // Add user from payload to request object
     const user = await User.findOne({ email: decoded.email });
+    console.log(decoded, "decode");
     req.user = user;
+    console.log(user, "decode user");
     next();
   });
 };

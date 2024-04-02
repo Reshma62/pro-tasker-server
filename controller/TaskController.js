@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const {
   addTaskService,
   getTaskService,
@@ -9,12 +10,21 @@ const {
 exports.AddTaskController = async (req, res) => {
   try {
     const { id } = req?.user;
+    const { userId } = req?.query;
+    if (id !== userId) {
+      return res.json({
+        status: "fail",
+        message: "Unathoured access",
+        // data: addTask,
+      });
+    }
     const { title, description } = req.body;
     const data = {
       title,
       description,
       userId: id,
     };
+
     const addTask = await addTaskService(data);
 
     res.status(200).json({
@@ -32,18 +42,29 @@ exports.AddTaskController = async (req, res) => {
 
 // get tasks
 exports.GetTasksController = async (req, res) => {
-  // return res.send("Hello World");
   try {
     const id = req?.user?._id;
-    console.log(id);
-    const page = parseInt(req.query.page); //2
-    const size = parseInt(req.query.size); //5
+
+    const { userId } = req?.query;
+
+    console.log(userId, "============", id);
+
+    // Comparing ObjectIds
+    if (id.toString() !== userId.toString()) {
+      return res.json({
+        status: "fail",
+        message: "Unauthorized access",
+      });
+    }
+
+    const page = parseInt(req.query.page) || 0;
+    const size = parseInt(req.query.size) || 10;
     let skip = page * size;
     let query = {};
     if (req?.user) {
       query = { userId: id };
     }
-    // filter any field  from the request body like userId or any field
+    // filter any field from the request body like userId or any field
     for (const key in req.query) {
       if (req.query.hasOwnProperty(key) && key !== "page" && key !== "size") {
         query[key] = req.query[key];
@@ -53,7 +74,7 @@ exports.GetTasksController = async (req, res) => {
 
     res.status(200).json({
       status: "success",
-      message: "Get data successfully",
+      message: "Data retrieved successfully",
       data: getTasks,
     });
   } catch (error) {
@@ -63,11 +84,13 @@ exports.GetTasksController = async (req, res) => {
     });
   }
 };
+
 // get task by id
 
 exports.GetTaskByIdController = async (req, res) => {
   try {
     const { id } = req?.params;
+
     const singleTask = await getTaskByIdService(id);
     res.status(200).json({
       status: "success",
