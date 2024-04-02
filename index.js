@@ -17,7 +17,7 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// app.use(routes);
+app.use(routes);
 
 app.get("/", function (req, res) {
   res.send("Hello World Server health is ok with cores");
