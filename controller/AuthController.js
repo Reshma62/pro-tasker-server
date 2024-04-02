@@ -140,3 +140,21 @@ exports.LogOutController = async (req, res) => {
     });
   }
 };
+// create tokem
+exports.CreateTokenController = async (req, res) => {
+  try {
+    const user= req.body
+   TokenGenerate(user, res)
+
+    res.status(200).json({
+      status: 'success',
+      message: 'ServiceName',
+      data: ServiceName
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      error: error.message || 'Internal server error'
+    });
+  }
+};

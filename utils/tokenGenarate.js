@@ -2,10 +2,6 @@ const jwt = require("jsonwebtoken");
 
 const TokenGenerate = (user, res) => {
   const data = { email: user.email, id: user._id };
-  const oneDay = 24 * 60 * 60 * 1000; // One day in milliseconds
-  const currentTime = Date.now(); // Current time in milliseconds
-  // Expiration time is current time plus one day
-
   const token = jwt.sign(data, process.env.JWT_SECRET_KEY, {
     expiresIn: "1d",
   });
@@ -16,6 +12,7 @@ const TokenGenerate = (user, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "none",
+    expiresIn: 24 * 60 * 60 * 1000,
   });
 };
 module.exports = TokenGenerate;

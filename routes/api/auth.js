@@ -4,6 +4,7 @@ const {
   LoginController,
   GetAuthUserController,
   LogOutController,
+  CreateTokenController,
 } = require("../../controller/AuthController");
 const verifiToken = require("../../middleware/verifiToken");
 
@@ -12,6 +13,7 @@ _.get("/getAuthUser", verifiToken, GetAuthUserController);
 _.post("/signup", RegisterController);
 _.post("/login", LoginController);
 _.post("/logout", verifiToken, LogOutController);
+_.post("/createToken", CreateTokenController);
 
 
 
